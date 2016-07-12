@@ -15,8 +15,6 @@ module PigeonHole
       DateTime.civil(*args)
     end
 
-    #alias start sg unless method_defined?(:start)
-
     # Returns a hash, that will be turned into a JSON object and represent this
     # object.
     def as_json(*)
