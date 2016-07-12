@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pigeonhole (0.0.1)
+    pigeon_hole (0.0.1)
       json
 
 GEM
@@ -28,7 +28,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  pigeonhole!
+  pigeon_hole!
   rake
   rspec
 

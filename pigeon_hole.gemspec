@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name     = "pigeonhole"
+  s.name     = "pigeon_hole"
   s.version  = "0.0.1"
   s.platform = Gem::Platform::RUBY
   s.summary  = "Opt-in typed serialization for complex JSON types"

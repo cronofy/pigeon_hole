@@ -1,7 +1,7 @@
 require 'rake'
 require 'rspec'
 
-require "#{Rake.application.original_dir}/lib/pigeonhole"
+require "#{Rake.application.original_dir}/lib/pigeon_hole"
 
 include PigeonHole
 
