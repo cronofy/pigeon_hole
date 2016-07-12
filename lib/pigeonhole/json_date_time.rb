@@ -7,7 +7,7 @@ module PigeonHole
       args = object.values_at('y', 'm', 'd', 'H', 'M', 'S')
       of_a, of_b = object['of'].split('/')
       if of_b and of_b != '0'
-        args << DateTime.Rational(of_a.to_i, of_b.to_i)
+        args << DateTime.send(:Rational, of_a.to_i, of_b.to_i)
       else
         args << of_a
       end

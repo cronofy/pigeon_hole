@@ -1,10 +1,10 @@
-require_relative 'pigeonhole/typed_json'
-require_relative 'pigeonhole/json_date'
-require_relative 'pigeonhole/json_datetime'
-require_relative 'pigeonhole/json_symbol'
-require_relative 'pigeonhole/json_time'
-
 module PigeonHole
+  require_relative 'pigeonhole/typed_json'
+  require_relative 'pigeonhole/json_date'
+  require_relative 'pigeonhole/json_date_time'
+  require_relative 'pigeonhole/json_symbol'
+  require_relative 'pigeonhole/json_time'
+
   def generate(obj, *args)
     TypedJSON.generate(obj, *args)
   end

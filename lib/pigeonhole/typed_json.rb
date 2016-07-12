@@ -1,3 +1,5 @@
+require 'json'
+
 module PigeonHole
   class TypedJSON
     def self.generate(obj, *args)
@@ -9,10 +11,10 @@ module PigeonHole
       case obj
       when Time
         JSONTime.new(obj)
-      when Date
-        JSONDate.new(obj)
       when DateTime
         JSONDateTime.new(obj)
+      when Date
+        JSONDate.new(obj)
       when Symbol
         JSONSymbol.new(obj)
       else
