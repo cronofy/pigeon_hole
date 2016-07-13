@@ -10,6 +10,4 @@ Gem::Specification.new do |s|
   s.files         = Dir["lib/**/*"]
   s.test_files    = Dir["spec/**/*"]
   s.require_paths = ["lib"]
-
-  s.add_dependency('json')
 end
