@@ -4,15 +4,9 @@ module PigeonHole
     # day <tt>d</tt>, hour <tt>H</tt>, minute <tt>M</tt>, second <tt>S</tt>,
     # offset <tt>of</tt> and Day of Calendar Reform <tt>sg</tt> to DateTime.
     def self.json_create(object)
-      args = object.values_at('y', 'm', 'd', 'H', 'M', 'S')
-      of_a, of_b = object['of'].split('/')
-      if of_b and of_b != '0'
-        args << DateTime.send(:Rational, of_a.to_i, of_b.to_i)
-      else
-        args << of_a
-      end
-      args << object['sg']
-      DateTime.civil(*args)
+      ms_since_epoc = object['ms'].to_i
+      seconds, fragment = ms_since_epoc.divmod(1000)
+      Time.at(seconds, fragment * 1000).utc.to_datetime
     end
 
     # Returns a hash, that will be turned into a JSON object and represent this
@@ -20,14 +14,7 @@ module PigeonHole
     def as_json(*)
       {
         JSON.create_id => self.class.name,
-        'y' => year,
-        'm' => month,
-        'd' => day,
-        'H' => hour,
-        'M' => min,
-        'S' => sec,
-        'of' => offset.to_s,
-        'sg' => start,
+        'ms' => (to_time.tv_sec * 1000) + (to_time.usec / 1000),
       }
     end
 
