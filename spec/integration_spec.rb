@@ -73,6 +73,24 @@ describe "serializing symbols" do
   end
 end
 
+describe "serializing arrays" do
+  let(:array) { [:a_symbol, { "test" => :foo } ] }
+
+  subject { PigeonHole.generate(array: array) }
+
+  it "serializes hash into a string" do
+    result = subject
+    expect(result).to_not be_empty
+  end
+
+  it "can be deserialized to a array" do
+    result = subject
+    hash = PigeonHole.parse(result)
+    expect(hash).to eq({ "array" => array })
+    expect(hash["array"]).to be_a(Array)
+  end
+end
+
 describe "serializing nested hashes" do
   let(:expected) do
     {

@@ -22,6 +22,17 @@ module PigeonHole
       end
     end
 
+    def self.map_array_value(value)
+      case value
+      when Hash
+        each_with_parent(value)
+      when Array
+        value.map { |av| map_array_value(av) }
+      else
+        map_to_json(value)
+      end
+    end
+
     def self.each_with_parent(hash, result=nil)
       duplicated_hash = {} || result
 
@@ -29,6 +40,8 @@ module PigeonHole
         case v
         when Hash
           duplicated_hash[k] = each_with_parent(v, duplicated_hash)
+        when Array
+          duplicated_hash[k] = v.map { |av| map_array_value(av) }
         else
           duplicated_hash[k] = map_to_json(v)
         end
