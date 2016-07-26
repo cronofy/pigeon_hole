@@ -10,7 +10,7 @@ def random_integer
 end
 
 def random_time
-  Time.now - random_integer
+  Time.at((Time.now - random_integer).to_i)
 end
 
 def random_date

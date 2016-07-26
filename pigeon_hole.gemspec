@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name     = "pigeon_hole"
-  s.version  = "0.0.1"
+  s.version  = "0.0.3"
   s.platform = Gem::Platform::RUBY
   s.summary  = "Opt-in typed serialization for complex JSON types"
   s.homepage = "http://www.cronofy.com"
