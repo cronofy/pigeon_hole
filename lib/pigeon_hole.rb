@@ -1,7 +1,6 @@
 module PigeonHole
   require_relative 'pigeon_hole/typed_json'
   require_relative 'pigeon_hole/json_date'
-  require_relative 'pigeon_hole/json_date_time'
   require_relative 'pigeon_hole/json_symbol'
   require_relative 'pigeon_hole/json_time'
 

@@ -36,25 +36,6 @@ describe "serializing times" do
   end
 end
 
-describe "serializing datetimes" do
-  let(:date_time) { random_date_time }
-
-  subject { PigeonHole.generate(date_time: date_time) }
-
-  it "serializes hash into a string" do
-    result = subject
-    expect(result).to_not be_empty
-  end
-
-  it "can be deserialized to a date_time" do
-    result = subject
-    hash = PigeonHole.parse(result)
-    expect(hash["date_time"]).to be_a(DateTime)
-    expect(hash["date_time"].to_date).to eq(date_time.to_date)
-    expect(hash["date_time"].to_time.to_i).to eq(date_time.to_time.to_i)
-  end
-end
-
 describe "serializing symbols" do
   let(:symbol) { :a_symbol }
 

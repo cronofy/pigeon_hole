@@ -11,8 +11,6 @@ module PigeonHole
       case obj
       when Time
         JSONTime.new(obj)
-      when DateTime
-        JSONDateTime.new(obj)
       when Date
         JSONDate.new(obj)
       when Symbol
