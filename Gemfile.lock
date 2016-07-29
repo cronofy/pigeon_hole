@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pigeon_hole (0.0.4)
+    pigeon_hole (0.1.0)
 
 GEM
   remote: https://rubygems.org/
