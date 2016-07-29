@@ -47,7 +47,7 @@ module PigeonHole
     def self.deserialize_value(value)
       case value
       when Hash
-        if deserializer = DESERIALIZERS[value['*']]
+        if deserializer = DESERIALIZERS[value[TYPE_KEY]]
           deserializer.deserialize(value)
         else
           value.each do |k, v|
