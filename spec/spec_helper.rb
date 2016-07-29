@@ -1,9 +1,6 @@
-require 'rake'
-require 'rspec'
+require 'bundler'
 
-require "#{Rake.application.original_dir}/lib/pigeon_hole"
-
-include PigeonHole
+Bundler.require
 
 def random_integer
   rand(9999)
