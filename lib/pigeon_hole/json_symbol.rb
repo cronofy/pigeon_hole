@@ -1,22 +1,16 @@
 module PigeonHole
-  class JSONSymbol < SimpleDelegator
-    # Returns a hash, that will be turned into a JSON object and represent this
-    # object.
-    def as_json(*)
+  module JSONSymbol
+    TYPE_VALUE = 'sym'.freeze
+
+    def self.serialize(symbol)
       {
-        JSON.create_id => self.class.name,
-        's'            => to_s,
+        TypedJSON::TYPE_KEY => TYPE_VALUE,
+        's' => symbol.to_s,
       }
     end
 
-    # Stores class name (Symbol) with String representation of Symbol as a JSON string.
-    def to_json(*a)
-      as_json.to_json(*a)
-    end
-
-    # Deserializes JSON string by converting the <tt>string</tt> value stored in the object to a Symbol
-    def self.json_create(o)
-      o['s'].to_sym
+    def self.deserialize(hash)
+      hash['s'].to_sym
     end
   end
 end

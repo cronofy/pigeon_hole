@@ -7,15 +7,11 @@ require_relative 'pigeon_hole/json_time'
 require_relative 'pigeon_hole/typed_json'
 
 module PigeonHole
-  def self.generate(obj, *args)
-    TypedJSON.generate(obj, *args)
+  def self.generate(obj)
+    TypedJSON.generate(obj)
   end
 
   def self.parse(string)
-    load(string)
-  end
-
-  def self.load(string)
-    JSON.load(string)
+    TypedJSON.parse(string)
   end
 end

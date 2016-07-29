@@ -14,18 +14,56 @@ module PigeonHole
       FalseClass,
     ].uniq.freeze
 
+    DESERIALIZERS = {
+      JSONDate::TYPE_VALUE => JSONDate,
+      JSONTime::TYPE_VALUE => JSONTime,
+      JSONSymbol::TYPE_VALUE => JSONSymbol,
+    }.freeze
+
     SERIALIZERS = {
       Date => JSONDate,
       Time => JSONTime,
       Symbol => JSONSymbol,
     }.freeze
 
+    TYPE_KEY = '*'.freeze
+
     def self.generate(obj, *args)
-      hash_dup = serializable_value(obj)
+      hash_dup = serialize_value(obj)
       JSON.generate(hash_dup, *args)
     end
 
-    def self.serializable_value(value)
+    def self.parse(value)
+      hash = JSON.parse(value)
+      translate(hash)
+    end
+
+    def self.translate(hash)
+      deserialize_value(hash)
+    end
+
+    private
+
+    def self.deserialize_value(value)
+      case value
+      when Hash
+        if deserializer = DESERIALIZERS[value['*']]
+          deserializer.deserialize(value)
+        else
+          value.each do |k, v|
+            value[k] = deserialize_value(v)
+          end
+
+          value
+        end
+      when Array
+        value.map! { |av| deserialize_value(av) }
+      else
+        value
+      end
+    end
+
+    def self.serialize_value(value)
       case value
       when *BASIC_TYPES
         value
@@ -33,18 +71,18 @@ module PigeonHole
         hash = {}
 
         value.each do |k, v|
-          hash[k] = serializable_value(v)
+          hash[k] = serialize_value(v)
         end
 
         hash
       when Array
-        value.map { |av| serializable_value(av) }
+        value.map { |av| serialize_value(av) }
       else
         unless serializer = SERIALIZERS[value.class]
           raise UnsupportedType.new(value.class)
         end
 
-        serializer.new(value)
+        serializer.serialize(value)
       end
     end
   end
