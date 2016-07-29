@@ -73,16 +73,16 @@ describe "serializing arrays" do
 end
 
 describe "serializing nested hashes" do
-  let(:expected) do
+  let(:input) do
     {
-      foo: {
-        bar: random_time,
-        baz: :temp
+      "foo" => {
+        "bar" => random_time,
+        "baz" => :temp,
       }
     }
   end
 
-  subject { PigeonHole.generate(expected) }
+  subject { PigeonHole.generate(input) }
 
   it "serializes hash into a string" do
     result = subject
@@ -93,6 +93,22 @@ describe "serializing nested hashes" do
     result = subject
     hash = PigeonHole.parse(result)
 
-    expect(symbolize_hash(hash)).to eq(expected)
+    expect(hash).to eq(input)
+  end
+end
+
+describe "serializing custom type" do
+  CustomType = Struct.new(:name)
+
+  let(:input) do
+    {
+      "custom" => CustomType.new("hello"),
+    }
+  end
+
+  subject { PigeonHole.generate(input) }
+
+  it "raises an unsupported type error" do
+    expect { subject }.to raise_error(PigeonHole::TypedJSON::UnsupportedType)
   end
 end
