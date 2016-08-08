@@ -1,6 +1,30 @@
 module PigeonHole
   class TypedJSON
     class UnsupportedType < ArgumentError
+      attr_reader :key
+      attr_reader :klass
+
+      def initialize(key, klass)
+        @key = key
+        @klass = klass
+
+        super("Serialization of #{klass} is not supported - key=#{key}")
+      end
+
+      def add_key_context(parent_key)
+        add_context(parent_key)
+      end
+
+      def add_index_context(index)
+        add_context("[#{index}]")
+      end
+
+      private
+
+      def add_context(context)
+        combined_key = [context, key].compact.join(".").sub(".[", "[")
+        self.class.new(combined_key, klass)
+      end
     end
 
     BASIC_TYPES = [
@@ -71,15 +95,25 @@ module PigeonHole
         hash = {}
 
         value.each do |k, v|
-          hash[k] = serialize_value(v)
+          begin
+            hash[k] = serialize_value(v)
+          rescue UnsupportedType => e
+            raise e.add_key_context(k)
+          end
         end
 
         hash
       when Array
-        value.map { |av| serialize_value(av) }
+        value.each_with_index.map do |av, i|
+          begin
+            serialize_value(av)
+          rescue UnsupportedType => e
+            raise e.add_index_context(i)
+          end
+        end
       else
         unless serializer = SERIALIZERS[value.class]
-          raise UnsupportedType.new("Serialization of #{value.class} is not supported")
+          raise UnsupportedType.new(nil, value.class)
         end
 
         serializer.serialize(value)

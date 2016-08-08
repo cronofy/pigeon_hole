@@ -100,15 +100,37 @@ end
 describe "serializing custom type" do
   CustomType = Struct.new(:name)
 
-  let(:input) do
-    {
-      "custom" => CustomType.new("hello"),
-    }
+  context "in a hash" do
+    let(:input) do
+      {
+        "nested" => {
+          "custom" => CustomType.new("hello"),
+        }
+      }
+    end
+
+    subject { PigeonHole.generate(input) }
+
+    it "raises an unsupported type error" do
+      expect { subject }.to raise_error(PigeonHole::TypedJSON::UnsupportedType, "Serialization of CustomType is not supported - key=nested.custom")
+    end
   end
 
-  subject { PigeonHole.generate(input) }
+  context "in an array" do
+    let(:input) do
+      {
+        "nested" => [
+          "string",
+          1337,
+          CustomType.new("hello"),
+        ]
+      }
+    end
 
-  it "raises an unsupported type error" do
-    expect { subject }.to raise_error(PigeonHole::TypedJSON::UnsupportedType, "Serialization of CustomType is not supported")
+    subject { PigeonHole.generate(input) }
+
+    it "raises an unsupported type error" do
+      expect { subject }.to raise_error(PigeonHole::TypedJSON::UnsupportedType, "Serialization of CustomType is not supported - key=nested[2]")
+    end
   end
 end
