@@ -79,7 +79,7 @@ module PigeonHole
         value.map { |av| serialize_value(av) }
       else
         unless serializer = SERIALIZERS[value.class]
-          raise UnsupportedType.new(value.class)
+          raise UnsupportedType.new("Serialization of #{value.class} is not supported")
         end
 
         serializer.serialize(value)
