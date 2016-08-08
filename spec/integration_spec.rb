@@ -102,13 +102,15 @@ describe "serializing custom type" do
 
   let(:input) do
     {
-      "custom" => CustomType.new("hello"),
+      "nested" => {
+        "custom" => CustomType.new("hello"),
+      }
     }
   end
 
   subject { PigeonHole.generate(input) }
 
   it "raises an unsupported type error" do
-    expect { subject }.to raise_error(PigeonHole::TypedJSON::UnsupportedType, "Error serializing key=custom - Serialization of CustomType is not supported")
+    expect { subject }.to raise_error(PigeonHole::TypedJSON::UnsupportedType, "Serialization of CustomType is not supported - key=nested.custom")
   end
 end
