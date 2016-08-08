@@ -95,7 +95,13 @@ module PigeonHole
 
         hash
       when Array
-        value.map { |av| serialize_value(av) }
+        value.each_with_index.map do |av, i|
+          begin
+            serialize_value(av)
+          rescue UnsupportedType => e
+            raise e.add_context(i)
+          end
+        end
       else
         unless serializer = SERIALIZERS[value.class]
           raise UnsupportedType.new(nil, value.class)
