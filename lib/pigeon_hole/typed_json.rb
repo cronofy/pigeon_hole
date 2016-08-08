@@ -11,9 +11,14 @@ module PigeonHole
         super("Serialization of #{klass} is not supported - key=#{key}")
       end
 
-      def add_context(parent_key)
-        combined_key = [parent_key, key].compact.join(".")
+      def add_key_context(parent_key)
+        combined_key = [parent_key, key].compact.join(".").sub(".[", "[")
 
+        self.class.new(combined_key, klass)
+      end
+
+      def add_index_context(index)
+        combined_key = ["[#{index}]", key].compact.join(".")
         self.class.new(combined_key, klass)
       end
     end
@@ -89,7 +94,7 @@ module PigeonHole
           begin
             hash[k] = serialize_value(v)
           rescue UnsupportedType => e
-            raise e.add_context(k)
+            raise e.add_key_context(k)
           end
         end
 
@@ -99,7 +104,7 @@ module PigeonHole
           begin
             serialize_value(av)
           rescue UnsupportedType => e
-            raise e.add_context(i)
+            raise e.add_index_context(i)
           end
         end
       else
