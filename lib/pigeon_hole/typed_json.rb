@@ -12,13 +12,17 @@ module PigeonHole
       end
 
       def add_key_context(parent_key)
-        combined_key = [parent_key, key].compact.join(".").sub(".[", "[")
-
-        self.class.new(combined_key, klass)
+        add_context(parent_key)
       end
 
       def add_index_context(index)
-        combined_key = ["[#{index}]", key].compact.join(".")
+        add_context("[#{index}]")
+      end
+
+      private
+
+      def add_context(context)
+        combined_key = [context, key].compact.join(".").sub(".[", "[")
         self.class.new(combined_key, klass)
       end
     end
