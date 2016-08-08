@@ -71,7 +71,11 @@ module PigeonHole
         hash = {}
 
         value.each do |k, v|
-          hash[k] = serialize_value(v)
+          begin
+            hash[k] = serialize_value(v)
+          rescue UnsupportedType => e
+            raise UnsupportedType.new("Error serializing key=#{k} - #{e.message}")
+          end
         end
 
         hash

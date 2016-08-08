@@ -109,6 +109,6 @@ describe "serializing custom type" do
   subject { PigeonHole.generate(input) }
 
   it "raises an unsupported type error" do
-    expect { subject }.to raise_error(PigeonHole::TypedJSON::UnsupportedType, "Serialization of CustomType is not supported")
+    expect { subject }.to raise_error(PigeonHole::TypedJSON::UnsupportedType, "Error serializing key=custom - Serialization of CustomType is not supported")
   end
 end
