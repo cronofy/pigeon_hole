@@ -12,6 +12,10 @@ module PigeonHole
   end
 
   def self.parse(string)
-    TypedJSON.parse(string)
+    if string.is_a?(Hash)
+      string
+    else
+      TypedJSON.parse(string)
+    end
   end
 end
