@@ -59,11 +59,7 @@ module PigeonHole
 
     def self.parse(value)
       hash = JSON.parse(value)
-      if value[TYPE_KEY] == JSONHash::TYPE_VALUE
-        translate(JSONHash.deserialize(hash))
-      else
-        translate(hash)
-      end
+      translate(hash)
     end
 
     def self.translate(hash)
