@@ -5,12 +5,12 @@ module PigeonHole
     def self.serialize(hash)
       {
         TypedJSON::TYPE_KEY => TYPE_VALUE,
-        'value' => hash.to_a
+        'v' => hash.to_a
       }
     end
 
     def self.deserialize(hash)
-      Hash[hash['value']]
+      Hash[hash['v']]
     end
   end
 end
