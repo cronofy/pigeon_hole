@@ -132,6 +132,16 @@ describe "can deserialize standard json hashes" do
   end
 end
 
+describe "can deserialize ordered json hashes" do
+  let(:json_string) { '{ "*": "hash", "v": [["foo", 1]] }' }
+
+  it "can be deserialized to a symbol" do
+    hash = PigeonHole.parse(json_string)
+
+    expect(hash).to eq({ 'foo' => 1})
+  end
+end
+
 describe "serializing custom type" do
   CustomType = Struct.new(:name)
 

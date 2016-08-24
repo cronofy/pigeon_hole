@@ -109,7 +109,7 @@ module PigeonHole
           end
         end
 
-        JSONHash.serialize(hash)
+        hash
       when Array
         value.each_with_index.map do |av, i|
           begin
