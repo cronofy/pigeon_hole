@@ -97,6 +97,41 @@ describe "serializing nested hashes" do
   end
 end
 
+describe "preserving order of hashes" do
+  let(:input) do
+    {
+      "zzz" => random_time,
+      "aaa" => :temp,
+    }
+  end
+
+  subject { PigeonHole.generate(input) }
+
+  it "serializes hash into a string" do
+    result = subject
+    expect(result).to_not be_empty
+  end
+
+  it "can be deserialized to a symbol" do
+    result = subject
+    hash = PigeonHole.parse(result)
+
+    expect(hash).to eq(input)
+    expect(hash.keys.first).to eq("zzz")
+    expect(hash.keys.at(1)).to eq("aaa")
+  end
+end
+
+describe "can deserialize standard json hashes" do
+  let(:json_string) { '{ "foo": 1 }' }
+
+  it "can be deserialized to a symbol" do
+    hash = PigeonHole.parse(json_string)
+
+    expect(hash).to eq({ 'foo' => 1})
+  end
+end
+
 describe "serializing custom type" do
   CustomType = Struct.new(:name)
 

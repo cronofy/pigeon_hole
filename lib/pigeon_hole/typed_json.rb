@@ -73,6 +73,13 @@ module PigeonHole
       when Hash
         if deserializer = DESERIALIZERS[value[TYPE_KEY]]
           deserializer.deserialize(value)
+        elsif value[TYPE_KEY] == JSONHash::TYPE_VALUE
+          hash = JSONHash.deserialize(value)
+          hash.each do |k,v|
+            hash[k] = deserialize_value(v)
+          end
+
+          hash
         else
           value.each do |k, v|
             value[k] = deserialize_value(v)
@@ -102,7 +109,7 @@ module PigeonHole
           end
         end
 
-        hash
+        JSONHash.serialize(hash)
       when Array
         value.each_with_index.map do |av, i|
           begin
