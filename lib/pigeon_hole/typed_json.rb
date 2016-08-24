@@ -42,14 +42,12 @@ module PigeonHole
       JSONDate::TYPE_VALUE => JSONDate,
       JSONTime::TYPE_VALUE => JSONTime,
       JSONSymbol::TYPE_VALUE => JSONSymbol,
-      JSONHash::TYPE_VALUE => JSONHash,
     }.freeze
 
     SERIALIZERS = {
       Date => JSONDate,
       Time => JSONTime,
       Symbol => JSONSymbol,
-      Hash => JSONHash,
     }.freeze
 
     TYPE_KEY = '*'.freeze
@@ -61,7 +59,11 @@ module PigeonHole
 
     def self.parse(value)
       hash = JSON.parse(value)
-      translate(hash)
+      if value[TYPE_KEY] == JSONHash::TYPE_VALUE
+        translate(JSONHash.deserialize(hash))
+      else
+        translate(hash)
+      end
     end
 
     def self.translate(hash)
@@ -75,6 +77,13 @@ module PigeonHole
       when Hash
         if deserializer = DESERIALIZERS[value[TYPE_KEY]]
           deserializer.deserialize(value)
+        elsif value[TYPE_KEY] == JSONHash::TYPE_VALUE
+          hash = JSONHash.deserialize(value)
+          hash.each do |k,v|
+            hash[k] = deserialize_value(v)
+          end
+
+          hash
         else
           value.each do |k, v|
             value[k] = deserialize_value(v)
@@ -104,7 +113,7 @@ module PigeonHole
           end
         end
 
-        hash
+        JSONHash.serialize(hash)
       when Array
         value.each_with_index.map do |av, i|
           begin
