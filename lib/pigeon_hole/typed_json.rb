@@ -42,12 +42,14 @@ module PigeonHole
       JSONDate::TYPE_VALUE => JSONDate,
       JSONTime::TYPE_VALUE => JSONTime,
       JSONSymbol::TYPE_VALUE => JSONSymbol,
+      JSONHash::TYPE_VALUE => JSONHash,
     }.freeze
 
     SERIALIZERS = {
       Date => JSONDate,
       Time => JSONTime,
       Symbol => JSONSymbol,
+      Hash => JSONHash,
     }.freeze
 
     TYPE_KEY = '*'.freeze
