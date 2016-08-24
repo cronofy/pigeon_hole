@@ -40,12 +40,14 @@ module PigeonHole
 
     DESERIALIZERS = {
       JSONDate::TYPE_VALUE => JSONDate,
+      JSONHash::TYPE_VALUE => JSONHash,
       JSONTime::TYPE_VALUE => JSONTime,
       JSONSymbol::TYPE_VALUE => JSONSymbol,
     }.freeze
 
     SERIALIZERS = {
       Date => JSONDate,
+      Hash => JSONHash,
       Time => JSONTime,
       Symbol => JSONSymbol,
     }.freeze
@@ -66,20 +68,11 @@ module PigeonHole
       deserialize_value(hash)
     end
 
-    private
-
     def self.deserialize_value(value)
       case value
       when Hash
         if deserializer = DESERIALIZERS[value[TYPE_KEY]]
           deserializer.deserialize(value)
-        elsif value[TYPE_KEY] == JSONHash::TYPE_VALUE
-          hash = JSONHash.deserialize(value)
-          hash.each do |k,v|
-            hash[k] = deserialize_value(v)
-          end
-
-          hash
         else
           value.each do |k, v|
             value[k] = deserialize_value(v)
@@ -98,18 +91,6 @@ module PigeonHole
       case value
       when *BASIC_TYPES
         value
-      when Hash
-        hash = {}
-
-        value.each do |k, v|
-          begin
-            hash[k] = serialize_value(v)
-          rescue UnsupportedType => e
-            raise e.add_key_context(k)
-          end
-        end
-
-        JSONHash.serialize(hash)
       when Array
         value.each_with_index.map do |av, i|
           begin

@@ -117,8 +117,8 @@ describe "preserving order of hashes" do
     hash = PigeonHole.parse(result)
 
     expect(hash).to eq(input)
-    expect(hash.keys.first).to eq("zzz")
-    expect(hash.keys.at(1)).to eq("aaa")
+    expect(hash.keys).to eq(input.keys)
+    expect(hash.values).to eq(input.values)
   end
 end
 
