@@ -3,10 +3,14 @@ module PigeonHole
     TYPE_VALUE = 'hash'.freeze
 
     def self.serialize(hash)
-      {
-        TypedJSON::TYPE_KEY => TYPE_VALUE,
-        'v' => hash.to_a
-      }
+      if hash.empty?
+        {}
+      else
+        {
+          TypedJSON::TYPE_KEY => TYPE_VALUE,
+          'v' => hash.to_a
+        }
+      end
     end
 
     def self.deserialize(hash)

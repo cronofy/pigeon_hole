@@ -78,7 +78,8 @@ describe "serializing nested hashes" do
       "foo" => {
         "bar" => random_time,
         "baz" => :temp,
-      }
+      },
+      "empty" => {}
     }
   end
 
@@ -129,6 +130,33 @@ describe "can deserialize standard json hashes" do
     hash = PigeonHole.parse(json_string)
 
     expect(hash).to eq({ 'foo' => 1})
+  end
+end
+
+describe "can serialize an empty hash efficiently" do
+  let(:input) { Hash.new }
+
+  subject { PigeonHole.generate(input) }
+
+  it "serializes hash into a string" do
+    result = subject
+    expect(result).to_not be_empty
+    expect(result).to eq('{}')
+  end
+
+end
+
+describe "can deserialize an empty hash" do
+  it "can be deserialized to a hash" do
+    hash = PigeonHole.parse('{}')
+
+    expect(hash).to eq({})
+  end
+
+  it "can deserialize legacy strings" do
+    hash = PigeonHole.parse('{"*": "hash", "v": []}')
+
+    expect(hash).to eq({})
   end
 end
 
