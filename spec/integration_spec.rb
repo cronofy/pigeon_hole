@@ -98,6 +98,28 @@ describe "serializing nested hashes" do
   end
 end
 
+describe "serializing hashes with symbols" do
+  let(:input) do
+    {
+      :foo => :temp
+    }
+  end
+
+  subject { PigeonHole.generate(input) }
+
+  it "serializes hash into a string" do
+    result = subject
+    expect(result).to_not be_empty
+  end
+
+  it "hash keys are converted to strings" do
+    result = subject
+    hash = PigeonHole.parse(result)
+
+    expect(hash["foo"]).to eq(input[:foo])
+  end
+end
+
 describe "preserving order of hashes" do
   let(:input) do
     {
