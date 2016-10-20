@@ -27,6 +27,16 @@ module PigeonHole
       end
     end
 
+    class DuplicatedKey < ArgumentError
+      attr_reader :key
+
+      def initialize(key)
+        @key = key
+
+        super("Hash has a duplicated key=#{key}")
+      end
+    end
+
     BASIC_TYPES = [
       NilClass,
       String,
@@ -102,6 +112,10 @@ module PigeonHole
         hash = {}
 
         value.each do |k, v|
+          if hash.key?(k.to_s) || hash.key?(k.to_sym)
+            raise DuplicatedKey.new(k)
+          end
+
           begin
             hash[k] = serialize_value(v)
           rescue UnsupportedType => e

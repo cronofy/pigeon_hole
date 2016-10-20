@@ -117,6 +117,22 @@ describe "serializing hashes with symbols" do
     hash = PigeonHole.parse(result)
 
     expect(hash["foo"]).to eq(input[:foo])
+    expect(hash.keys).to_not include(:foo)
+  end
+end
+
+describe "serializing hashes with duplicated keys" do
+  let(:input) do
+    {
+      :foo => :temp,
+      "foo" => :bar
+    }
+  end
+
+  subject { PigeonHole.generate(input) }
+
+  it "raises an error on generation" do
+    expect { subject }.to raise_error(PigeonHole::TypedJSON::DuplicatedKey)
   end
 end
 
