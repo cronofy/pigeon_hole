@@ -1,4 +1,3 @@
-#Encoding: UTF-8
 require 'spec_helper'
 
 describe "serializing dates" do
@@ -38,7 +37,7 @@ describe "serializing times" do
 end
 
 describe "serializing unicode strings" do
-  let(:string) { "Test \u0000example".force_encoding("UTF-8") }
+  let(:string) { "Test \u0000example" }
   let(:sanitized_string) { "Test example" }
 
   subject { PigeonHole.generate(string: string) }
