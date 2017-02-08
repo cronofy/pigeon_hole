@@ -107,7 +107,7 @@ module PigeonHole
     def self.serialize_value(value)
       case value
       when String
-        value.gsub(/\u0000/, '')
+        value.tr("\u0000", "")
       when *BASIC_TYPES
         value
       when Hash
