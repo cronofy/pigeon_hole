@@ -36,6 +36,25 @@ describe "serializing times" do
   end
 end
 
+describe "serializing unicode strings" do
+  let(:string) { "Test \u0000example" }
+  let(:sanitized_string) { "Test example" }
+
+  subject { PigeonHole.generate(string: string) }
+
+  it "serializes hash into a string" do
+    result = subject
+    expect(result).to_not be_empty
+  end
+
+  it "can be deserialized to a string" do
+    result = subject
+    hash = PigeonHole.parse(result)
+    expect(hash).to eq({ "string" => sanitized_string })
+    expect(hash["string"]).to be_a(String)
+  end
+end
+
 describe "serializing symbols" do
   let(:symbol) { :a_symbol }
 
