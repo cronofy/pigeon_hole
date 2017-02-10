@@ -50,14 +50,14 @@ module PigeonHole
 
     DESERIALIZERS = {
       JSONDate::TYPE_VALUE => JSONDate,
-      JSONTime::TYPE_VALUE => JSONTime,
       JSONSymbol::TYPE_VALUE => JSONSymbol,
+      JSONTime::TYPE_VALUE => JSONTime,
     }.freeze
 
     SERIALIZERS = {
       Date => JSONDate,
-      Time => JSONTime,
       Symbol => JSONSymbol,
+      Time => JSONTime,
     }.freeze
 
     TYPE_KEY = '*'.freeze
@@ -90,6 +90,9 @@ module PigeonHole
           end
 
           hash
+        elsif value[TYPE_KEY] == JSONSet::TYPE_VALUE
+          values = JSONSet.deserialize(value)
+          values.map! { |v| deserialize_value(v) }.to_set
         else
           value.each do |k, v|
             value[k] = deserialize_value(v)
@@ -126,6 +129,16 @@ module PigeonHole
         end
 
         JSONHash.serialize(hash)
+      when Set
+        values = value.to_a.each_with_index.map do |sv, i|
+          begin
+            serialize_value(sv)
+          rescue UnsupportedType => e
+            raise e.add_index_context(i)
+          end
+        end
+
+        JSONSet.serialize(values)
       when Array
         value.each_with_index.map do |av, i|
           begin

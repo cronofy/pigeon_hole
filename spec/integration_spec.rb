@@ -91,6 +91,24 @@ describe "serializing arrays" do
   end
 end
 
+describe "serializing sets" do
+  let(:set) { %i{foo bar}.to_set }
+
+  subject { PigeonHole.generate(set: set) }
+
+  it "serializes hash into a string" do
+    result = subject
+    expect(result).to_not be_empty
+  end
+
+  it "can be deserialized to a set" do
+    result = subject
+    hash = PigeonHole.parse(result)
+    expect(hash).to eq({ "set" => set })
+    expect(hash["set"]).to be_a(Set)
+  end
+end
+
 describe "serializing nested hashes" do
   let(:input) do
     {
