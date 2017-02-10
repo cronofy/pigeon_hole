@@ -50,14 +50,14 @@ module PigeonHole
 
     DESERIALIZERS = {
       JSONDate::TYPE_VALUE => JSONDate,
-      JSONTime::TYPE_VALUE => JSONTime,
       JSONSymbol::TYPE_VALUE => JSONSymbol,
+      JSONTime::TYPE_VALUE => JSONTime,
     }.freeze
 
     SERIALIZERS = {
       Date => JSONDate,
-      Time => JSONTime,
       Symbol => JSONSymbol,
+      Time => JSONTime,
     }.freeze
 
     TYPE_KEY = '*'.freeze
