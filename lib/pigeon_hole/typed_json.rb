@@ -41,8 +41,6 @@ module PigeonHole
       NilClass,
       String,
       Integer,
-      Fixnum,
-      Bignum,
       Float,
       TrueClass,
       FalseClass,

@@ -1,3 +1,5 @@
+require 'date'
+
 module PigeonHole
   module JSONDate
     TYPE_VALUE = 'date'.freeze
